@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>خزنة أسراري</title>
+    <title>KeyVault - خزنة أسراري</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* سأبقي نفس التصميم الجميل الخاص بك مع تحسينات بسيطة للاستقرار */
         :root {
             --primary: #8b5cf6;
             --primary-dark: #7c3aed;
@@ -17,23 +18,199 @@
             --header-height: 70px;
         }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: var(--bg);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             color: var(--text);
             height: 100vh;
-            height: -webkit-fill-available;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        header {
+            height: var(--header-height);
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 45px 1fr 45px;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 { margin: 0; font-size: 20px; color: var(--primary-dark); font-weight: 700; text-align: center; }
+
+        .menu-btn {
+            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: #f3f4f6; cursor: pointer;
+        }
+
+        .main-menu {
+            position: absolute; top: 75px; left: 20px; background: white;
+            border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 260px; display: none; z-index: 1000; border: 1px solid #f3f4f6;
+        }
+
+        .menu-item { padding: 15px 20px; border-bottom: 1px solid #f3f4f6; cursor: pointer; display: flex; justify-content: space-between; }
+
+        .container { padding: 20px; max-width: 500px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 15px; }
+
+        input { width: 100%; padding: 15px; border: 1px solid var(--gray-border); border-radius: 12px; font-size: 16px; outline: none; }
+
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+        .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
+
+        /* Vault Page */
+        #vaultPage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9fafb; z-index: 2000; display: none; flex-direction: column; }
+        .vault-fixed-top { padding: 20px; background: white; border-bottom: 1px solid #eee; }
+        #vaultList { flex: 1; overflow-y: auto; padding: 20px; }
+
+        .account-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-right: 5px solid var(--primary); }
+        .card-email { font-weight: bold; margin-bottom: 5px; color: #1f2937; }
+        .card-pass { font-family: monospace; background: #f3f4f6; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: none; justify-content: center; align-items: center; }
+        .modal { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; }
+        
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; display: none; z-index: 4000; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="menu-btn" onclick="toggleMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+    </div>
+    <h1>KeyVault 🔐</h1>
+    <div id="mainMenu" class="main-menu">
+        <div class="menu-item" onclick="exportData()">📦 نسخ احتياطي</div>
+        <div class="menu-item" onclick="importData()">📥 استيراد بيانات</div>
+        <div class="menu-item" onclick="clearAll()" style="color:red">🗑️ حذف الكل</div>
+    </div>
+</header>
+
+<div class="container">
+    <input type="text" id="emailInput" placeholder="الإيميل أو اسم الحساب">
+    <input type="text" id="passInput" placeholder="كلمة المرور">
+    <button class="btn btn-primary" onclick="addAccount()">حفظ في الخزنة</button>
+    <button class="btn btn-outline" onclick="openVault()">فتح المحفوظات</button>
+</div>
+
+<div id="vaultPage">
+    <div class="vault-fixed-top">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>المحفوظات 📂</h2>
+            <button class="btn" style="width:auto; padding:5px 15px;" onclick="closeVault()">إغلاق</button>
+        </div>
+        <input type="text" id="search" placeholder="بحث..." oninput="renderVault()" style="margin-top:10px">
+    </div>
+    <div id="vaultList"></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    // استخدام localStorage فقط لضمان عدم إعادة التحميل
+    let accounts = JSON.parse(localStorage.getItem('vault_data') || '[]');
+
+    function toggleMenu() {
+        const m = document.getElementById('mainMenu');
+        m.style.display = m.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function addAccount() {
+        const email = document.getElementById('emailInput').value;
+        const pass = document.getElementById('passInput').value;
+        if(!email || !pass) return showToast("املاً البيانات!");
+
+        accounts.unshift({id: Date.now(), email, pass});
+        save();
+        document.getElementById('emailInput').value = '';
+        document.getElementById('passInput').value = '';
+        showToast("تم الحفظ ✅");
+    }
+
+    function save() {
+        localStorage.setItem('vault_data', JSON.stringify(accounts));
+    }
+
+    function openVault() {
+        document.getElementById('vaultPage').style.display = 'flex';
+        renderVault();
+    }
+
+    function closeVault() {
+        document.getElementById('vaultPage').style.display = 'none';
+    }
+
+    function renderVault() {
+        const list = document.getElementById('vaultList');
+        const searchTerm = document.getElementById('search').value.toLowerCase();
+        list.innerHTML = '';
+
+        accounts.filter(a => a.email.toLowerCase().includes(searchTerm)).forEach(acc => {
+            const div = document.createElement('div');
+            div.className = 'account-card';
+            div.innerHTML = `
+                <div class="card-email">${acc.email}</div>
+                <div class="card-pass" onclick="copyText('${acc.pass}')">•••••••• (اضغط للنسخ)</div>
+                <button onclick="deleteAcc(${acc.id})" style="margin-top:10px; color:red; border:none; background:none; cursor:pointer">حذف</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function deleteAcc(id) {
+        if(confirm("هل تريد الحذف؟")) {
+            accounts = accounts.filter(a => a.id !== id);
+            save();
+            renderVault();
+        }
+    }
+
+    function copyText(txt) {
+        navigator.clipboard.writeText(txt);
+        showToast("تم نسخ كلمة المرور 📋");
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    function exportData() {
+        const data = btoa(JSON.stringify(accounts));
+        prompt("انسخ هذا الكود واحفظه في مكان آمن:", data);
+    }
+
+    function importData() {
+        const code = prompt("أدخل كود النسخة الاحتياطية:");
+        if(code) {
+            try {
+                accounts = JSON.parse(atob(code));
+                save();
+                renderVault();
+                showToast("تم الاستيراد بنجاح!");
+            } catch(e) { alert("كود غير صالح!"); }
+        }
+    }
+
+    function clearAll() {
+        if(confirm("سيتم مسح كل شيء! هل أنت متأكد؟")) {
+            localStorage.clear();
+            accounts = [];
+            renderVault();
+            location.reload();
+        }
+    }
+</script>
+</body>
+</html>
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
@@ -1288,4 +1465,5 @@
 </script>
 
 </body>
+
 </html>
