@@ -211,6 +211,122 @@
 </script>
 </body>
 </html>
+    <button class="btn btn-primary" onclick="addAccount()">حفظ في الخزنة</button>
+    <button class="btn btn-outline" onclick="openVault()">فتح المحفوظات</button>
+</div>
+
+<div id="vaultPage">
+    <div class="vault-fixed-top">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>المحفوظات 📂</h2>
+            <button class="btn" style="width:auto; padding:5px 15px;" onclick="closeVault()">إغلاق</button>
+        </div>
+        <input type="text" id="search" placeholder="بحث..." oninput="renderVault()" style="margin-top:10px">
+    </div>
+    <div id="vaultList"></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    // استخدام localStorage فقط لضمان عدم إعادة التحميل
+    let accounts = JSON.parse(localStorage.getItem('vault_data') || '[]');
+
+    function toggleMenu() {
+        const m = document.getElementById('mainMenu');
+        m.style.display = m.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function addAccount() {
+        const email = document.getElementById('emailInput').value;
+        const pass = document.getElementById('passInput').value;
+        if(!email || !pass) return showToast("املاً البيانات!");
+
+        accounts.unshift({id: Date.now(), email, pass});
+        save();
+        document.getElementById('emailInput').value = '';
+        document.getElementById('passInput').value = '';
+        showToast("تم الحفظ ✅");
+    }
+
+    function save() {
+        localStorage.setItem('vault_data', JSON.stringify(accounts));
+    }
+
+    function openVault() {
+        document.getElementById('vaultPage').style.display = 'flex';
+        renderVault();
+    }
+
+    function closeVault() {
+        document.getElementById('vaultPage').style.display = 'none';
+    }
+
+    function renderVault() {
+        const list = document.getElementById('vaultList');
+        const searchTerm = document.getElementById('search').value.toLowerCase();
+        list.innerHTML = '';
+
+        accounts.filter(a => a.email.toLowerCase().includes(searchTerm)).forEach(acc => {
+            const div = document.createElement('div');
+            div.className = 'account-card';
+            div.innerHTML = `
+                <div class="card-email">${acc.email}</div>
+                <div class="card-pass" onclick="copyText('${acc.pass}')">•••••••• (اضغط للنسخ)</div>
+                <button onclick="deleteAcc(${acc.id})" style="margin-top:10px; color:red; border:none; background:none; cursor:pointer">حذف</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function deleteAcc(id) {
+        if(confirm("هل تريد الحذف؟")) {
+            accounts = accounts.filter(a => a.id !== id);
+            save();
+            renderVault();
+        }
+    }
+
+    function copyText(txt) {
+        navigator.clipboard.writeText(txt);
+        showToast("تم نسخ كلمة المرور 📋");
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    function exportData() {
+        const data = btoa(JSON.stringify(accounts));
+        prompt("انسخ هذا الكود واحفظه في مكان آمن:", data);
+    }
+
+    function importData() {
+        const code = prompt("أدخل كود النسخة الاحتياطية:");
+        if(code) {
+            try {
+                accounts = JSON.parse(atob(code));
+                save();
+                renderVault();
+                showToast("تم الاستيراد بنجاح!");
+            } catch(e) { alert("كود غير صالح!"); }
+        }
+    }
+
+    function clearAll() {
+        if(confirm("سيتم مسح كل شيء! هل أنت متأكد؟")) {
+            localStorage.clear();
+            accounts = [];
+            renderVault();
+            location.reload();
+        }
+    }
+</script>
+</body>
+</html>
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
@@ -1467,3 +1583,4 @@
 </body>
 
 </html>
+
