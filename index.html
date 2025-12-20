@@ -12,14 +12,17 @@
     
     <style>
         :root {
-            --primary: #1a73e8; 
-            --primary-dark: #1765cc;
-            --bg: #f0f2f5;
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --bg: #f9fafb;
             --surface: #ffffff;
             --text: #374151;
             --gray-border: #e5e7eb;
             --danger: #ef4444;
             --header-height: 70px;
+            
+            /* ألوان جوجل */
+            --google-blue: #1a73e8;
         }
 
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -33,68 +36,37 @@
             padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* --- تصميم صفحة الدخول (الجديد) --- */
+        /* --- تصميم صفحة الدخول (مخفية) --- */
         #loginOverlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #f0f2f5;
-            z-index: 2000; display: flex; flex-direction: column;
+            z-index: 6000; display: none; flex-direction: column;
             align-items: center; justify-content: center;
             padding: 20px;
         }
-
         .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white; padding: 40px; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;
+            width: 100%; max-width: 400px; font-family: 'Segoe UI', sans-serif;
         }
-
         .google-logo { width: 75px; margin-bottom: 10px; }
-
-        .login-card h2 {
-            font-size: 24px; font-weight: 400; margin-bottom: 8px; color: #202124; margin-top: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .login-card p {
-            color: #5f6368; margin-bottom: 30px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .google-btn {
+        .google-btn-auth {
             display: flex; align-items: center; justify-content: center;
-            background-color: #1a73e8; color: white; border: none;
+            background-color: var(--google-blue); color: white; border: none;
             padding: 2px; border-radius: 4px; font-size: 14px;
             font-weight: 500; cursor: pointer; width: 100%;
             transition: background-color 0.3s; text-decoration: none;
             font-family: 'Segoe UI', sans-serif;
         }
-
-        .google-btn:hover { background-color: #1765cc; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-
+        .google-btn-auth:hover { background-color: #1765cc; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
         .google-icon-wrapper {
-            background: white; padding: 8px; border-radius: 2px;
-            margin-left: 1px; /* تعديل بسيط للمسافة */
-            display: flex; align-items: center; justify-content: center;
-            height: 38px; width: 38px; margin: 1px;
+            background: white; padding: 8px; border-radius: 2px; margin: 1px;
+            display: flex; align-items: center; justify-content: center; height: 38px; width: 38px;
         }
-
         .google-icon { width: 18px; height: 18px; }
-        
         .btn-text { flex: 1; text-align: center; }
 
-        .footer-links {
-            margin-top: 40px; display: flex; justify-content: space-between; font-size: 13px;
-        }
-
-        .footer-links a { color: #1a73e8; text-decoration: none; font-family: 'Segoe UI', sans-serif; }
-
-
-        /* --- بقية ستايل التطبيق --- */
+        /* --- تصميم التطبيق --- */
         header {
             height: var(--header-height); padding: 0 20px;
             display: grid; grid-template-columns: 45px 1fr 45px;
@@ -103,7 +75,7 @@
         }
 
         h1 {
-            margin: 0; font-size: 20px; color: var(--text);
+            margin: 0; font-size: 20px; color: var(--primary-dark);
             font-weight: 700; display: flex; align-items: center;
             justify-content: center; gap: 8px; white-space: nowrap;
         }
@@ -118,24 +90,22 @@
         .main-menu {
             position: absolute; top: calc(var(--header-height) + 5px); left: 20px;
             background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-            width: 260px; display: none; flex-direction: column; overflow: hidden;
+            width: 280px; display: none; flex-direction: column; overflow: hidden;
             z-index: 1000; border: 1px solid #f3f4f6;
             animation: menuPop 0.2s ease-out;
         }
         @keyframes menuPop { from{opacity:0; transform:scale(0.95);} to{opacity:1; transform:scale(1);} }
         
         .menu-item {
-            padding: 16px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6;
+            padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6;
             font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; color: #4b5563;
         }
         .menu-item:last-child { border-bottom: none; }
         .menu-item:active { background: #f9fafb; }
         .delete-item { color: var(--danger); }
-        .sync-item { background: #f0f9ff; color: var(--primary-dark); } 
-
-        .user-profile-img {
-            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd;
-        }
+        .sync-item { background: #f0f9ff; color: var(--primary-dark); }
+        
+        .user-profile-img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd; }
 
         .container {
             padding: 0 25px; flex: 1; display: flex; flex-direction: column; gap: 15px;
@@ -148,26 +118,26 @@
             outline: none; background: white; color: var(--text); transition: 0.3s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .app-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1); }
+        .app-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1); }
 
         .btn {
             width: 100%; padding: 16px; border: none; border-radius: 14px;
             font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-primary { background: linear-gradient(135deg, #1a73e8, #1765cc); color: white; box-shadow: 0 8px 20px -4px rgba(26, 115, 232, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.4); }
         .btn-primary:active { transform: scale(0.98); }
         .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 5px; }
         .btn-outline:active { background: #f5f3ff; transform: scale(0.98); }
 
         #vaultPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #f0f2f5; z-index: 200; display: none; flex-direction: column;
+            background: #f9fafb; z-index: 200; display: none; flex-direction: column;
             overflow: hidden; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
         }
 
         .vault-fixed-top {
-            padding: 10px 20px 5px 20px; background: #f0f2f5; flex-shrink: 0;
+            padding: 10px 20px 5px 20px; background: #f9fafb; flex-shrink: 0;
             display: flex; flex-direction: column; gap: 10px; z-index: 10;
         }
 
@@ -199,7 +169,7 @@
         }
         .folder-chip.active {
             background: var(--primary); color: white; border-color: var(--primary);
-            box-shadow: 0 4px 10px rgba(26, 115, 232, 0.2);
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
         }
         .add-folder-btn {
             background: #f3f4f6; color: var(--primary); font-weight: bold; width: 35px; height: 35px;
@@ -214,7 +184,7 @@
             transition: transform 0.2s, background-color 0.2s;
             border: 1px solid transparent;
         }
-        .account-card.selected-card { background: #e8f0fe; border-color: var(--primary); }
+        .account-card.selected-card { background: #f5f3ff; border-color: var(--primary); }
         .account-card.dragging { opacity: 0.6; background: #fafafa; border: 2px dashed #ccc; transform: scale(0.98); }
         
         .selection-check {
@@ -295,28 +265,26 @@
 </head>
 <body oncontextmenu="return false;">
 
-<!-- صفحة الدخول بالتصميم الجديد (مطابق للصورة) -->
+<!-- واجهة تسجيل الدخول (Google Overlay) -->
 <div id="loginOverlay">
     <div class="login-card">
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="google-logo">
-        
-        <h2>تسجيل الدخول</h2>
-        <p>المتابعة إلى حسابك</p>
+        <h2 style="font-size:24px; font-weight:400; margin:0 0 8px 0; color:#202124;">تسجيل الدخول</h2>
+        <p style="color:#5f6368; margin-bottom:30px;">المتابعة إلى حسابك</p>
 
-        <!-- تم تحويل الزر ليشغل دالة الدخول -->
-        <a href="#" class="google-btn" onclick="event.preventDefault(); startGoogleLogin()">
+        <a href="#" class="google-btn-auth" onclick="event.preventDefault(); startGoogleLogin()">
             <div class="google-icon-wrapper">
                 <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G logo"/>
             </div>
             <span class="btn-text">المتابعة باستخدام Google</span>
         </a>
 
-        <div class="footer-links">
-            <a href="#">إنشاء حساب</a>
-            <a href="#">مزيد من المعلومات</a>
+        <div style="margin-top:40px; display:flex; justify-content:space-between; font-size:13px;">
+            <a href="#" style="color:#1a73e8; text-decoration:none;">إنشاء حساب</a>
+            <a href="#" style="color:#1a73e8; text-decoration:none;">مزيد من المعلومات</a>
         </div>
-        
-        <div id="loginStatus" style="margin-top:20px; font-size:13px; color:var(--primary); display:none; font-family:'Tajawal'">جاري الاتصال...</div>
+        <div id="loginStatus" style="margin-top:20px; font-size:13px; color:var(--primary); display:none;">جاري الاتصال...</div>
+        <button onclick="document.getElementById('loginOverlay').style.display='none'" style="margin-top:20px; background:none; border:none; color:#666; cursor:pointer;">إغلاق</button>
     </div>
 </div>
 
@@ -332,37 +300,70 @@
     
     <div style="width: 45px;"></div>
     
+    <!-- القائمة الرئيسية -->
     <div id="mainMenu" class="main-menu" onclick="event.stopPropagation()">
-        <div class="menu-item sync-item" onclick="forceSyncFromCloud()">
-            <span>تحديث من السحابة (جلب)</span>
-            <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M8 17l4 4 4-4"></path></svg>
-        </div>
-        <div class="menu-item sync-item" onclick="forceUploadToDrive()">
-            <span>دمج ورفع للسحابة</span>
-            <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M16 16l-4-4-4 4"></path></svg>
+        
+        <!-- قسم جوجل: يظهر زر الدخول أو أزرار المزامنة -->
+        <div id="googleSection">
+            <div id="googleLoginBtnArea">
+                <div class="menu-item" onclick="openLoginOverlay()" style="color:var(--google-blue);">
+                    <span>تسجيل الدخول (Google)</span>
+                    <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                </div>
+            </div>
+
+            <div id="googleSyncActions" style="display:none;">
+                <div class="menu-item sync-item" onclick="forceSyncFromCloud()">
+                    <span>جلب من السحابة (تنزيل)</span>
+                    <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M8 17l4 4 4-4"></path></svg>
+                </div>
+                <div class="menu-item sync-item" onclick="forceUploadToDrive()">
+                    <span>رفع إلى السحابة (حفظ)</span>
+                    <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M16 16l-4-4-4 4"></path></svg>
+                </div>
+            </div>
+            <div style="height:1px; background:#f0f0f0; margin:5px 0;"></div>
         </div>
 
+        <!-- باقي الخيارات -->
         <div class="menu-item" id="menuSetPass" onclick="handleAppLockSettings()">
             <span id="lockMenuText">إعدادات القفل</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
+        
         <div class="menu-item" onclick="showBackupModal()">
             <span>نسخ احتياطي (كود)</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path></svg>
         </div>
+        
+        <!-- زر تنزيل ملف JSON -->
+        <div class="menu-item" onclick="exportDataAuto()">
+            <span>تنزيل نسخة ملف (JSON)</span>
+            <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        </div>
+
         <div class="menu-item" onclick="showImportModal()">
             <span>استيراد (كود)</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
         </div>
+
+        <!-- زر استيراد ملف JSON -->
+        <div class="menu-item" onclick="document.getElementById('importFile').click()">
+            <span>استيراد ملف (JSON)</span>
+            <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        </div>
+        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataWrapper(event)">
+
         <div class="menu-item delete-item" onclick="confirmDeleteAll()">
             <span>حذف جميع البيانات</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
         </div>
-        <div class="menu-item delete-item" onclick="handleLogout()" style="border-top:1px solid #f0f0f0">
-            <span>تسجيل الخروج</span>
-            <div id="logoutIconArea">
-                <!-- صورة المستخدم ستظهر هنا -->
-                <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg>
+
+        <!-- زر تسجيل الخروج (يظهر فقط عند تسجيل الدخول وفي آخر القائمة) -->
+        <div id="googleLogoutContainer" style="display:none; border-top:1px solid #f0f0f0;">
+            <div class="menu-item delete-item" onclick="handleGoogleLogout()">
+                <span>تسجيل خروج Google</span>
+                <div id="googleLogoutIcon">🚪</div>
             </div>
         </div>
     </div>
@@ -416,7 +417,6 @@
 
     <div id="vaultList"></div>
     
-    <!-- زر الحذف المضاف -->
     <div id="bottomBar" class="bottom-action-bar">
         <span id="selectedCount" style="min-width: 60px;">0 محدد</span>
         
@@ -426,7 +426,7 @@
         </button>
 
         <button class="action-btn-small" onclick="openMoveModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2-2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
             نقل إلى...
         </button>
     </div>
@@ -556,23 +556,16 @@
                         localStorage.setItem('gAccessToken', gAccessToken);
                         document.getElementById('loginOverlay').style.display = 'none';
                         showToast("تم الدخول ✅");
-                        fetchUserInfo(); 
-                        syncFromCloud(true); 
+                        checkGoogleLoginState();
+                        fetchUserInfo();
                     }
                 }
             });
-            tryRestoreSession();
-        }
-    }
-
-    // --- حل مشكلة تسجيل الدخول اليومي ---
-    function tryRestoreSession() {
-        if(gAccessToken) {
-            document.getElementById('loginOverlay').style.display = 'none';
-            fetchUserInfo(); 
-            syncFromCloud(true);
-        } else {
-            if(tokenClient) {
+            // Try silent login
+            if(gAccessToken) {
+                checkGoogleLoginState();
+                fetchUserInfo();
+            } else if(tokenClient) {
                 tokenClient.requestAccessToken({prompt: 'none'});
             }
         }
@@ -583,9 +576,26 @@
         if(tokenClient) tokenClient.requestAccessToken();
     }
 
+    function openLoginOverlay() {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('loginOverlay').style.display = 'flex';
+    }
+
+    function checkGoogleLoginState() {
+        if(gAccessToken) {
+            document.getElementById('googleLoginBtnArea').style.display = 'none';
+            document.getElementById('googleSyncActions').style.display = 'block';
+            document.getElementById('googleLogoutContainer').style.display = 'block'; // Show logout
+        } else {
+            document.getElementById('googleLoginBtnArea').style.display = 'block';
+            document.getElementById('googleSyncActions').style.display = 'none';
+            document.getElementById('googleLogoutContainer').style.display = 'none'; // Hide logout
+        }
+    }
+
     async function fetchUserInfo() {
         if(!gAccessToken) return;
-        const localPic = localStorage.getItem('userPhoto');
+        const localPic = localStorage.getItem('userPhotoVault');
         if(localPic) updateLogoutIcon(localPic);
 
         try {
@@ -595,7 +605,7 @@
             if(res.ok) {
                 let data = await res.json();
                 if(data.picture) {
-                    localStorage.setItem('userPhoto', data.picture);
+                    localStorage.setItem('userPhotoVault', data.picture);
                     updateLogoutIcon(data.picture);
                 }
             }
@@ -603,207 +613,66 @@
     }
 
     function updateLogoutIcon(url) {
-        const area = document.getElementById('logoutIconArea');
-        if(area) {
-            area.innerHTML = `<img src="${url}" class="user-profile-img" alt="User">`;
-        }
+        const area = document.getElementById('googleLogoutIcon');
+        if(area) area.innerHTML = `<img src="${url}" class="user-profile-img" alt="User">`;
     }
 
-    function handleLogout() {
+    function handleGoogleLogout() {
         document.getElementById('mainMenu').style.display = 'none';
-        customConfirm("هل أنت متأكد؟ سيتم حذف البيانات من هذا الجهاز (للحماية) وستبقى في السحابة.", () => {
+        customConfirm("هل تريد تسجيل الخروج من Google؟", () => {
             localStorage.removeItem('gAccessToken');
-            localStorage.removeItem('myPasswords'); 
-            localStorage.removeItem('myFolders');
-            localStorage.removeItem('appPass'); 
-            localStorage.removeItem('vaultPass'); 
-            localStorage.removeItem('userPhoto'); 
-            location.reload(); 
+            localStorage.removeItem('userPhotoVault');
+            gAccessToken = null;
+            document.getElementById('googleLogoutIcon').innerText = '🚪';
+            checkGoogleLoginState();
+            showToast("تم تسجيل الخروج من السحابة");
         });
     }
 
-    // --- SYNC ENGINE ---
-    async function syncFromCloud(silent = false) {
-        if(!gAccessToken) return;
+    // --- SYNC ENGINE (Direct Replace) ---
+    
+    function setSyncLoader(show) { document.getElementById('syncLoader').style.display = show ? 'inline-block' : 'none'; }
+
+    async function forceUploadToDrive() {
+        document.getElementById('mainMenu').style.display = 'none';
+        if(!gAccessToken) { showToast("غير مسجل دخول ⚠️"); return; }
         setSyncLoader(true);
-        if(!silent) showToast("جاري التحديث...");
-        
+        showToast("جاري الرفع للسحابة...");
+
         try {
-            const unique = new Date().getTime();
+            // Check for existing file
             const q = `name = '${FILENAME}' and 'appDataFolder' in parents and trashed = false`;
-            
-            const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder&orderBy=modifiedTime desc&cb=${unique}`, {
+            const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder`, {
                 headers: { 'Authorization': `Bearer ${gAccessToken}` }
             });
-            
-            if(searchResp.status === 401) { 
-                console.log("Token expired, refreshing...");
-                localStorage.removeItem('gAccessToken');
-                gAccessToken = null;
-                tokenClient.requestAccessToken({prompt: 'none'});
-                return; 
+
+            if(searchResp.status === 401) {
+                localStorage.removeItem('gAccessToken'); gAccessToken=null; 
+                tokenClient.requestAccessToken(); return;
             }
+
             const data = await searchResp.json();
+            let fileId = null;
+            if(data.files && data.files.length > 0) fileId = data.files[0].id;
 
-            if (data.files && data.files.length > 0) {
-                if (data.files.length > 1) {
-                    if(!silent) showToast("توحيد الملفات...");
-                    let mergedAccounts = [...accounts];
-                    let mergedFolders = [...folders];
-                    let mergedAppPass = localStorage.getItem('appPass');
-                    let mergedVaultPass = localStorage.getItem('vaultPass');
-                    const processedIds = new Set(accounts.map(a => a.id));
-
-                    for (const f of data.files) {
-                        try {
-                             const fResp = await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media&cb=${unique}`, {
-                                headers: { 'Authorization': `Bearer ${gAccessToken}` }
-                            });
-                            const fData = await fResp.json();
-                            if(fData.accounts) {
-                                fData.accounts.forEach(acc => {
-                                    if(!processedIds.has(acc.id)) {
-                                        mergedAccounts.push(acc);
-                                        processedIds.add(acc.id);
-                                    }
-                                });
-                            }
-                            if(fData.folders) {
-                                fData.folders.forEach(fo => { if(!mergedFolders.includes(fo)) mergedFolders.push(fo); });
-                            }
-                            if(fData.appPass) mergedAppPass = fData.appPass; 
-                            if(fData.vaultPass) mergedVaultPass = fData.vaultPass; 
-                        } catch(e) {}
-                    }
-
-                    const masterFileId = data.files[0].id;
-                    const payload = { 
-                        accounts: mergedAccounts, 
-                        folders: mergedFolders, 
-                        appPass: mergedAppPass,
-                        vaultPass: mergedVaultPass 
-                    };
-                    const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
-                    
-                    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${masterFileId}?uploadType=media`, {
-                        method: 'PATCH',
-                        headers: {'Authorization': `Bearer ${gAccessToken}`, 'Content-Type': 'application/json'},
-                        body: blob
-                    });
-
-                    for (let i = 1; i < data.files.length; i++) await deleteFile(data.files[i].id);
-
-                    accounts = mergedAccounts;
-                    folders = mergedFolders;
-                    if(mergedAppPass) localStorage.setItem('appPass', mergedAppPass);
-                    if(mergedVaultPass) localStorage.setItem('vaultPass', mergedVaultPass);
-                    
-                    saveToLocal();
-                    renderVault();
-                    if(!silent) showToast("تم توحيد البيانات ✅");
-
-                } else {
-                    const fileId = data.files[0].id;
-                    const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&cb=${unique}`, {
-                        headers: { 'Authorization': `Bearer ${gAccessToken}` }
-                    });
-                    
-                    if (fileResp.ok) {
-                        const cloudContent = await fileResp.json();
-                        
-                        if(cloudContent.appPass) localStorage.setItem('appPass', cloudContent.appPass);
-                        else localStorage.removeItem('appPass');
-
-                        if(cloudContent.vaultPass) localStorage.setItem('vaultPass', cloudContent.vaultPass);
-                        else localStorage.removeItem('vaultPass');
-
-                        if(cloudContent && Array.isArray(cloudContent.accounts)) {
-                            const localIds = new Set(accounts.map(a => a.id));
-                            let addedCount = 0;
-                            cloudContent.accounts.forEach(acc => {
-                                if(!localIds.has(acc.id)) { 
-                                    accounts.push(acc); 
-                                    addedCount++; 
-                                }
-                            });
-                            const localFolders = new Set(folders);
-                            (cloudContent.folders || []).forEach(f => {
-                                if(!localFolders.has(f)) { folders.push(f); }
-                            });
-
-                            if(addedCount > 0) {
-                                saveToLocal(); renderVault();
-                                if(!silent) showToast(`تم جلب ${addedCount} عنصر جديد ✅`);
-                            } else if(!silent) {
-                                showToast("لا توجد تغييرات جديدة");
-                            }
-                        }
-                    }
-                }
-            } else {
-                 if(accounts.length > 0) uploadToDrive(true);
-            }
-        } catch(e) { console.error(e); }
-        setSyncLoader(false);
-    }
-
-    async function uploadToDrive(silent = true, deletedId = null) {
-        if(!gAccessToken) return;
-        setSyncLoader(true);
-        if(!silent) showToast("جاري الرفع...");
-        
-        try {
-            const unique = new Date().getTime();
-            const q = `name = '${FILENAME}' and 'appDataFolder' in parents and trashed = false`;
-            const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder&orderBy=modifiedTime desc&cb=${unique}`, {
-                headers: { 'Authorization': `Bearer ${gAccessToken}` }
-            });
-            const data = await searchResp.json();
-
-            let finalAccounts = [...accounts];
-            let finalFolders = [...folders];
-            let targetFileId = null;
-
-            if (data.files && data.files.length > 0) {
-                targetFileId = data.files[0].id;
-                const cloudResp = await fetch(`https://www.googleapis.com/drive/v3/files/${targetFileId}?alt=media&cb=${unique}`, {
-                    headers: { 'Authorization': `Bearer ${gAccessToken}` }
-                });
-                if(cloudResp.ok) {
-                    const cloudData = await cloudResp.json();
-                    if(cloudData && cloudData.accounts) {
-                        const localIds = new Set(accounts.map(a => a.id));
-                        cloudData.accounts.forEach(cAcc => {
-                            if(!localIds.has(cAcc.id) && cAcc.id !== deletedId) {
-                                finalAccounts.push(cAcc);
-                            }
-                        });
-                        const localFolderSet = new Set(folders);
-                        (cloudData.folders || []).forEach(cF => {
-                            if(!localFolderSet.has(cF)) finalFolders.push(cF);
-                        });
-                    }
-                }
-                if(data.files.length > 1) {
-                    for(let i=1; i<data.files.length; i++) await deleteFile(data.files[i].id);
-                }
-            }
-
+            // Prepare Data Package
             const payload = { 
-                accounts: finalAccounts, 
-                folders: finalFolders,
+                accounts: accounts, 
+                folders: folders,
                 appPass: localStorage.getItem('appPass'),
                 vaultPass: localStorage.getItem('vaultPass') 
             };
             const fileBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
 
-            if (targetFileId) {
-                await fetch(`https://www.googleapis.com/upload/drive/v3/files/${targetFileId}?uploadType=media`, {
+            if(fileId) {
+                // Update existing file
+                await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
                     method: 'PATCH',
                     headers: { 'Authorization': `Bearer ${gAccessToken}`, 'Content-Type': 'application/json' },
                     body: fileBlob
                 });
             } else {
+                // Create new file
                 const metadata = { name: FILENAME, mimeType: 'application/json', parents: ['appDataFolder'] };
                 const form = new FormData();
                 form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
@@ -814,38 +683,105 @@
                     body: form
                 });
             }
-
-            accounts = finalAccounts;
-            folders = finalFolders;
-            saveToLocal();
-            renderVault();
-            if(!silent) showToast("تم الحفظ في السحابة ✅");
-        } catch(e) { console.error(e); showToast("فشل الرفع! ❌"); }
+            showToast("تم الحفظ في السحابة ✅");
+        } catch(e) {
+            console.error(e);
+            showToast("فشل الرفع ❌");
+        }
         setSyncLoader(false);
     }
 
-    async function deleteFile(id) {
-        await fetch(`https://www.googleapis.com/drive/v3/files/${id}`, {
-            method: 'DELETE', headers: { 'Authorization': `Bearer ${gAccessToken}` }
-        });
-    }
+    async function forceSyncFromCloud() {
+        document.getElementById('mainMenu').style.display = 'none';
+        if(!gAccessToken) { showToast("غير مسجل دخول ⚠️"); return; }
+        setSyncLoader(true);
+        showToast("جاري جلب البيانات...");
 
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'visible' && gAccessToken) {
-            syncFromCloud(true);
+        try {
+            const q = `name = '${FILENAME}' and 'appDataFolder' in parents and trashed = false`;
+            const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder`, {
+                headers: { 'Authorization': `Bearer ${gAccessToken}` }
+            });
+            
+            const data = await searchResp.json();
+            if(data.files && data.files.length > 0) {
+                const fileId = data.files[0].id;
+                const fileResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                    headers: { 'Authorization': `Bearer ${gAccessToken}` }
+                });
+                const cloudContent = await fileResp.json();
+                
+                // Replace local data with cloud data
+                if(cloudContent) {
+                    if(cloudContent.accounts) accounts = cloudContent.accounts;
+                    if(cloudContent.folders) folders = cloudContent.folders;
+                    
+                    if(cloudContent.appPass) localStorage.setItem('appPass', cloudContent.appPass);
+                    else localStorage.removeItem('appPass');
+
+                    if(cloudContent.vaultPass) localStorage.setItem('vaultPass', cloudContent.vaultPass);
+                    else localStorage.removeItem('vaultPass');
+
+                    saveToLocal();
+                    renderVault();
+                    showToast("تم استعادة البيانات ✅");
+                }
+            } else {
+                showToast("لا توجد نسخة احتياطية ℹ️");
+            }
+        } catch(e) {
+            console.error(e);
+            showToast("فشل الجلب ❌");
         }
-    });
-    window.addEventListener('online', () => syncFromCloud(true));
-
-    function forceSyncFromCloud() {
-        document.getElementById('mainMenu').style.display='none';
-        syncFromCloud(false);
-    }
-    function forceUploadToDrive() {
-        document.getElementById('mainMenu').style.display='none';
-        uploadToDrive(false);
+        setSyncLoader(false);
     }
 
+    // --- FILE EXPORT/IMPORT (New) ---
+    function exportDataAuto() {
+        document.getElementById('mainMenu').style.display = 'none';
+        const dataToSave = {
+            accounts: accounts,
+            folders: folders
+        };
+        const blob = new Blob([JSON.stringify(dataToSave)], {type: "application/json"});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "secrets_vault_backup.json";
+        a.click();
+    }
+
+    function importDataWrapper(e) {
+        document.getElementById('mainMenu').style.display = 'none';
+        const reader = new FileReader();
+        reader.onload = (f) => {
+            try {
+                const imported = JSON.parse(f.target.result);
+                // Handle different structures
+                const newAccounts = Array.isArray(imported) ? imported : (imported.accounts || []);
+                const newFolders = imported.folders || ["عام"];
+                
+                // Merge logic (Append new to existing)
+                const clean = newAccounts.map(a => ({ id: a.id || Date.now()+Math.random(), email: a.email || a.title || "مستورد", pass: a.pass||"...", folder: a.folder||"عام" }));
+                accounts = [...accounts, ...clean];
+                
+                // Add new folders if unique
+                newFolders.forEach(f => {
+                    if(!folders.includes(f)) folders.push(f);
+                });
+
+                saveToLocal();
+                renderVault();
+                showToast('تم استعادة البيانات بنجاح ✅');
+            } catch(e){
+                showToast('ملف غير صالح ❌');
+            }
+        };
+        if(e.target.files.length > 0) {
+            reader.readAsText(e.target.files[0]);
+        }
+    }
+
+    // --- Helper Functions ---
     function saveToLocal() {
         localStorage.setItem('myPasswords', JSON.stringify(accounts));
         localStorage.setItem('myFolders', JSON.stringify(folders));
@@ -869,6 +805,7 @@
                 visible=true; 
             } 
         });
+        
         if(!visible && document.getElementById('vaultPage').style.display === 'flex') {
             document.getElementById('vaultPage').style.display = 'none';
         }
@@ -884,11 +821,16 @@
                 closedModal = true;
             }
         });
+
         if(!closedModal) {
             const vault = document.getElementById('vaultPage');
             if(vault.style.display === 'flex') {
                 vault.style.display = 'none';
             }
+        }
+        
+        if(document.getElementById('loginOverlay').style.display === 'flex') {
+            document.getElementById('loginOverlay').style.display = 'none';
         }
     };
 
@@ -913,6 +855,7 @@
         const email = document.getElementById('emailInput').value;
         const pass = document.getElementById('passInput').value;
         if (!email) { showToast("أدخل البيانات أولاً ⚠️"); return; }
+        
         isMoveAction = false;
         openFolderSelectModal("حفظ في...");
     }
@@ -920,12 +863,13 @@
     function saveAccount(targetFolder) {
         const email = document.getElementById('emailInput').value;
         const pass = document.getElementById('passInput').value;
+        
         accounts.unshift({ id: Date.now(), email, pass, folder: targetFolder });
         saveToLocal();
-        uploadToDrive(true); 
+
         document.getElementById('emailInput').value = '';
         document.getElementById('passInput').value = '';
-        showToast("تم الحفظ محلياً وجاري الرفع...");
+        showToast("تم الحفظ محلياً");
         renderVault();
     }
 
@@ -950,7 +894,6 @@
             chip.ontouchmove = cancelPress;
             chip.onmouseup = cancelPress;
             chip.ontouchend = cancelPress;
-            
             bar.appendChild(chip);
         });
         const addBtn = document.createElement('div');
@@ -993,13 +936,13 @@
                 <div class="card-main" onclick="handleCardClick(event, ${acc.id})">
                     <div class="card-email" 
                          onmousedown="startPress('email', ${acc.id})" ontouchstart="startPress('email', ${acc.id})" 
-                         ontouchmove="cancelPress()" 
+                         ontouchmove="cancelPress()"
                          onmouseup="cancelPress()" ontouchend="cancelPress()">
                         <span>${displayName}</span>
                     </div>
                     <div id="pass-${acc.id}" class="card-pass-pill hidden-pass"
                         onmousedown="startPress('pass', ${acc.id})" ontouchstart="startPress('pass', ${acc.id})" 
-                        ontouchmove="cancelPress()" 
+                        ontouchmove="cancelPress()"
                         onmouseup="cancelPress()" ontouchend="cancelPress()">••••••••</div>
                 </div>
             `;
@@ -1023,14 +966,12 @@
         }
         renderVault();
     }
-    
+
     function deleteSelected() {
         if(selectedIds.size === 0) return;
         customConfirm(`هل أنت متأكد من حذف ${selectedIds.size} عنصر؟`, () => {
-             const idsToDelete = Array.from(selectedIds);
              accounts = accounts.filter(acc => !selectedIds.has(acc.id));
              saveToLocal();
-             uploadToDrive(false); 
              toggleSelectionMode(); 
              renderVault();
              showToast("تم الحذف ✅");
@@ -1064,6 +1005,7 @@
         }
     }
 
+    // --- Folders & Modals ---
     function openFolderSelectModal(title) {
         showOverlay('folderSelectModal');
         document.getElementById('folderModalTitle').innerText = title;
@@ -1098,7 +1040,6 @@
     function executeMove(targetFolder) {
         accounts.forEach(acc => { if(selectedIds.has(acc.id)) acc.folder = targetFolder; });
         saveToLocal();
-        uploadToDrive(); 
         toggleSelectionMode(); activeFolder = targetFolder; renderFoldersBar(); renderVault();
         showToast("تم النقل ✅");
     }
@@ -1122,7 +1063,7 @@
         } else {
             if(!folders.includes(name)) folders.push(name);
         }
-        saveToLocal(); uploadToDrive(); goBack(); renderFoldersBar(); renderVault();
+        saveToLocal(); goBack(); renderFoldersBar(); renderVault();
     }
 
     function startFolderPress(f) {
@@ -1190,7 +1131,6 @@
         }
 
         saveToLocal();
-        uploadToDrive(); 
     }
 
     // --- Context Menu ---
@@ -1214,18 +1154,17 @@
             if (action === 'copy') copyToClipboard(currentCtxType === 'email' ? acc.email : acc.pass);
             else if (action === 'delete') {
                 customConfirm("حذف نهائي؟", () => {
-                    const idToDelete = currentCtxId; 
-                    accounts = accounts.filter(a => a.id !== idToDelete); 
+                    const idToDelete = currentCtxId; // Capture ID
+                    accounts = accounts.filter(a => a.id !== idToDelete); // Delete Local
                     saveToLocal();
                     renderVault();
-                    uploadToDrive(false, idToDelete); 
                     showToast("تم الحذف");
                 });
             } else if (action === 'edit') {
                 document.getElementById('emailInput').value = acc.email;
                 document.getElementById('passInput').value = acc.pass;
                 accounts = accounts.filter(a => a.id !== currentCtxId);
-                saveToLocal(); uploadToDrive(); renderVault(); 
+                saveToLocal(); renderVault(); 
                 if(document.getElementById('vaultPage').style.display==='flex') goBack();
             }
         }, 200);
@@ -1239,8 +1178,8 @@
         
         document.getElementById('lockMenuText').innerText = appPass ? "إلغاء قفل التطبيق" : "تعيين قفل للتطبيق";
         
-        const savedPic = localStorage.getItem('userPhoto');
-        if(savedPic) updateLogoutIcon(savedPic);
+        // Update Google State in Menu
+        checkGoogleLoginState();
 
         if (m.style.display === 'flex') {
             m.style.display = 'none';
@@ -1261,7 +1200,6 @@
                 if(v === appPass) { 
                     localStorage.removeItem('appPass'); 
                     showToast("تم إزالة القفل 🔓");
-                    uploadToDrive(); 
                 }
                 else showToast("خطأ في الرمز");
             });
@@ -1270,7 +1208,6 @@
                 if(v) { 
                     localStorage.setItem('appPass', v); 
                     showToast("تم القفل 🔒");
-                    uploadToDrive(); 
                 } 
             });
         }
@@ -1278,16 +1215,8 @@
 
     function confirmDeleteAll() {
         document.getElementById('mainMenu').style.display = 'none';
-        customConfirm("حذف كل البيانات (محلي وسحابي)؟", async () => {
+        customConfirm("حذف كل البيانات (محلي فقط)؟", async () => {
             localStorage.clear(); accounts = []; folders = ["عام"];
-            if(gAccessToken) {
-                try {
-                    const q = `name = '${FILENAME}' and 'appDataFolder' in parents`;
-                    const s = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder`,{headers:{'Authorization':`Bearer ${gAccessToken}`}});
-                    const d = await s.json();
-                    if(d.files) for(const f of d.files) await deleteFile(f.id);
-                } catch(e){}
-            }
             location.reload();
         });
     }
@@ -1321,14 +1250,12 @@
             if(v===vp){ 
                 localStorage.removeItem('vaultPass'); 
                 showToast("تم الإلغاء"); 
-                uploadToDrive(); 
             } else showToast("خطأ"); 
         });
         else openPasswordModal("قفل الخزنة", v => { 
             if(v){ 
                 localStorage.setItem('vaultPass', v); 
                 showToast("تم القفل");
-                uploadToDrive(); 
             } 
         });
     }
@@ -1363,13 +1290,12 @@
             const raw = Array.isArray(data) ? data : (data.accounts || []);
             const clean = raw.map(a => ({ id: a.id || Date.now()+Math.random(), email: a.email || a.title || "مستورد", pass: a.pass||"...", folder: a.folder||"عام" }));
             accounts = [...accounts, ...clean];
-            saveToLocal(); uploadToDrive();
+            saveToLocal();
             goBack(); showToast(`تم استيراد ${clean.length} عنصر`); renderVault();
         } catch(e) { showToast("كود غير صالح ❌"); }
     }
     function pasteFromClipboard() { navigator.clipboard.readText().then(t => document.getElementById('importText').value = t); }
     function copyToClipboard(t) { navigator.clipboard.writeText(t).then(()=>showToast("تم النسخ")); }
-    function setSyncLoader(s) { document.getElementById('syncLoader').style.display = s ? 'inline-block' : 'none'; }
     function showToast(m) { const t=document.getElementById('toast'); t.innerText=m; t.style.opacity='1'; setTimeout(()=>t.style.opacity='0',2000); }
 
     window.onclick = (e) => { if(!e.target.closest('.menu-btn')) document.getElementById('mainMenu').style.display = 'none'; }
