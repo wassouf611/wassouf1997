@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>خزنة أسراري</title>
+    <title>خزنة أسراري (سحابي)</title>
     
     <!-- مكتبة جوجل -->
     <script src="https://accounts.google.com/gsi/client" onload="initGoogleLib()" async defer></script>
@@ -20,8 +20,6 @@
             --gray-border: #e5e7eb;
             --danger: #ef4444;
             --header-height: 70px;
-            
-            /* ألوان جوجل */
             --google-blue: #1a73e8;
         }
 
@@ -36,11 +34,12 @@
             padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* --- تصميم صفحة الدخول (مخفية) --- */
+        /* --- تصميم صفحة الدخول --- */
         #loginOverlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #f0f2f5;
-            z-index: 6000; display: none; flex-direction: column;
+            z-index: 6000; display: none; /* مخفي افتراضياً ويظهر بالجافاسكريبت إذا لزم الأمر */
+            flex-direction: column;
             align-items: center; justify-content: center;
             padding: 20px;
         }
@@ -269,22 +268,16 @@
 <div id="loginOverlay">
     <div class="login-card">
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="google-logo">
-        <h2 style="font-size:24px; font-weight:400; margin:0 0 8px 0; color:#202124;">تسجيل الدخول</h2>
-        <p style="color:#5f6368; margin-bottom:30px;">المتابعة إلى حسابك</p>
+        <h2 style="font-size:24px; font-weight:400; margin:0 0 8px 0; color:#202124;">سحابي فقط</h2>
+        <p style="color:#5f6368; margin-bottom:30px;">يجب تسجيل الدخول لاستخدام الخزنة</p>
 
         <a href="#" class="google-btn-auth" onclick="event.preventDefault(); startGoogleLogin()">
             <div class="google-icon-wrapper">
                 <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G logo"/>
             </div>
-            <span class="btn-text">المتابعة باستخدام Google</span>
+            <span class="btn-text">الدخول باستخدام Google</span>
         </a>
-
-        <div style="margin-top:40px; display:flex; justify-content:space-between; font-size:13px;">
-            <a href="#" style="color:#1a73e8; text-decoration:none;">إنشاء حساب</a>
-            <a href="#" style="color:#1a73e8; text-decoration:none;">مزيد من المعلومات</a>
-        </div>
-        <div id="loginStatus" style="margin-top:20px; font-size:13px; color:var(--primary); display:none;">جاري الاتصال...</div>
-        <button onclick="document.getElementById('loginOverlay').style.display='none'" style="margin-top:20px; background:none; border:none; color:#666; cursor:pointer;">إغلاق</button>
+        <div id="loginStatus" style="margin-top:20px; font-size:13px; color:var(--primary); display:none;">جاري الاتصال بالسحابة...</div>
     </div>
 </div>
 
@@ -303,29 +296,18 @@
     <!-- القائمة الرئيسية -->
     <div id="mainMenu" class="main-menu" onclick="event.stopPropagation()">
         
-        <!-- قسم جوجل: يظهر زر الدخول أو أزرار المزامنة -->
         <div id="googleSection">
-            <div id="googleLoginBtnArea">
-                <div class="menu-item" onclick="openLoginOverlay()" style="color:var(--google-blue);">
-                    <span>تسجيل الدخول (Google)</span>
-                    <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                </div>
-            </div>
-
-            <div id="googleSyncActions" style="display:none;">
+            <!-- قسم المزامنة -->
+            <div id="googleSyncActions">
                 <div class="menu-item sync-item" onclick="forceSyncFromCloud()">
-                    <span>جلب من السحابة (تنزيل)</span>
+                    <span>تحديث البيانات (تنزيل)</span>
                     <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M8 17l4 4 4-4"></path></svg>
                 </div>
-                <div class="menu-item sync-item" onclick="forceUploadToDrive()">
-                    <span>رفع إلى السحابة (حفظ)</span>
-                    <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M16 16l-4-4-4 4"></path></svg>
-                </div>
+                <!-- تم إزالة زر الرفع اليدوي كما طلبت -->
             </div>
             <div style="height:1px; background:#f0f0f0; margin:5px 0;"></div>
         </div>
 
-        <!-- باقي الخيارات -->
         <div class="menu-item" id="menuSetPass" onclick="handleAppLockSettings()">
             <span id="lockMenuText">إعدادات القفل</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -336,7 +318,6 @@
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path></svg>
         </div>
         
-        <!-- زر تنزيل ملف JSON -->
         <div class="menu-item" onclick="exportDataAuto()">
             <span>تنزيل نسخة ملف (JSON)</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -347,20 +328,13 @@
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
         </div>
 
-        <!-- زر استيراد ملف JSON -->
         <div class="menu-item" onclick="document.getElementById('importFile').click()">
             <span>استيراد ملف (JSON)</span>
             <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
         </div>
         <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importDataWrapper(event)">
 
-        <div class="menu-item delete-item" onclick="confirmDeleteAll()">
-            <span>حذف جميع البيانات</span>
-            <svg style="width:20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-        </div>
-
-        <!-- زر تسجيل الخروج (يظهر فقط عند تسجيل الدخول وفي آخر القائمة) -->
-        <div id="googleLogoutContainer" style="display:none; border-top:1px solid #f0f0f0;">
+        <div id="googleLogoutContainer" style="border-top:1px solid #f0f0f0;">
             <div class="menu-item delete-item" onclick="handleGoogleLogout()">
                 <span>تسجيل خروج Google</span>
                 <div id="googleLogoutIcon">🚪</div>
@@ -376,7 +350,7 @@
     <input type="text" id="passInput" class="app-input" placeholder="كلمة المرور" autocomplete="off">
     
     <button class="btn btn-primary" onclick="prepareSaveAccount()">
-        <span>حفظ في الخزنة</span> 
+        <span>حفظ سحابي</span> 
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
     </button>
 
@@ -394,7 +368,7 @@
 <div id="vaultPage">
     <div class="vault-fixed-top">
         <div class="vault-header">
-            <h2 class="vault-title">المحفوظات 📂</h2>
+            <h2 class="vault-title">المحفوظات (سحابي) ☁️</h2>
             <div class="header-actions">
                 <button id="selectToggleBtn" class="icon-btn" onclick="toggleSelectionMode()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -497,7 +471,8 @@
 
 <div id="backupModal" class="overlay" onclick="goBack()">
     <div class="modal" onclick="event.stopPropagation()">
-        <h3>نسخ احتياطي</h3>
+        <h3>نسخ احتياطي (للذاكرة)</h3>
+        <p style="font-size:12px; color:#666">هذا الكود يمثل البيانات الموجودة في الذاكرة الحالية.</p>
         <textarea id="backupText" style="width:100%; height:100px; border:1px solid #ddd; border-radius:12px; padding:10px; resize:none;" readonly></textarea>
         <div class="modal-actions">
             <button class="btn-small btn-confirm" onclick="copyBackup()">نسخ</button>
@@ -513,7 +488,7 @@
         <div class="modal-actions" style="flex-direction: column; gap:10px">
             <button class="btn-small btn-cancel" onclick="pasteFromClipboard()" style="width:100%">📋 لصق</button>
             <div style="display:flex; gap:10px; width:100%">
-                <button class="btn-small btn-confirm" onclick="performImport()">استعادة</button>
+                <button class="btn-small btn-confirm" onclick="performImport()">استعادة ورفع</button>
                 <button class="btn-small btn-cancel" onclick="goBack()">إلغاء</button>
             </div>
         </div>
@@ -523,11 +498,11 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // --- Data & State ---
-    let accounts = JSON.parse(localStorage.getItem('myPasswords') || '[]');
-    let folders = JSON.parse(localStorage.getItem('myFolders') || '["عام", "فيسبوك", "جوجل"]');
-    accounts.forEach(acc => { if(!acc.folder) acc.folder = 'عام'; });
-
+    // --- Data & State (RAM Only) ---
+    // لا يتم تحميل أي شيء من LocalStorage يتعلق بالبيانات
+    let accounts = []; 
+    let folders = ["عام"];
+    
     let longPressTimer, isLongPress = false;
     let currentCtxId = null, currentCtxType = null;
     let pendingCallback = null;
@@ -537,12 +512,14 @@
     let isMoveAction = false; 
     let folderRenameTarget = null;
     let vaultPressTimer = null;
+    let saveTimeout = null;
 
     // --- Google API Config ---
     const GOOGLE_CLIENT_ID = '979816526016-ukb9vqtb6u2hlutombpf8rumbjr3o2ua.apps.googleusercontent.com';
     const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.profile';
     const FILENAME = 'secret_vault_unified.json';
     let tokenClient;
+    // نحتفظ برمز الدخول لتجنب ظهور شاشة الدخول عند التحديث
     let gAccessToken = localStorage.getItem('gAccessToken');
 
     // --- Auth Functions ---
@@ -558,15 +535,21 @@
                         showToast("تم الدخول ✅");
                         checkGoogleLoginState();
                         fetchUserInfo();
+                        forceSyncFromCloud(true); // جلب تلقائي عند الدخول
                     }
                 }
             });
-            // Try silent login
+            
+            // عند بدء التشغيل:
             if(gAccessToken) {
+                // إذا كان الرمز موجوداً، اخفِ شاشة الدخول فوراً وابدأ المزامنة
+                document.getElementById('loginOverlay').style.display = 'none';
                 checkGoogleLoginState();
                 fetchUserInfo();
-            } else if(tokenClient) {
-                tokenClient.requestAccessToken({prompt: 'none'});
+                forceSyncFromCloud(true);
+            } else {
+                // إذا لم يكن مسجلاً، أظهر شاشة الدخول
+                document.getElementById('loginOverlay').style.display = 'flex';
             }
         }
     }
@@ -576,21 +559,8 @@
         if(tokenClient) tokenClient.requestAccessToken();
     }
 
-    function openLoginOverlay() {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('loginOverlay').style.display = 'flex';
-    }
-
     function checkGoogleLoginState() {
-        if(gAccessToken) {
-            document.getElementById('googleLoginBtnArea').style.display = 'none';
-            document.getElementById('googleSyncActions').style.display = 'block';
-            document.getElementById('googleLogoutContainer').style.display = 'block'; // Show logout
-        } else {
-            document.getElementById('googleLoginBtnArea').style.display = 'block';
-            document.getElementById('googleSyncActions').style.display = 'none';
-            document.getElementById('googleLogoutContainer').style.display = 'none'; // Hide logout
-        }
+        // لا حاجة لتغيير الأزرار، فالتطبيق لا يعمل بدون دخول
     }
 
     async function fetchUserInfo() {
@@ -619,43 +589,58 @@
 
     function handleGoogleLogout() {
         document.getElementById('mainMenu').style.display = 'none';
-        customConfirm("هل تريد تسجيل الخروج من Google؟", () => {
+        customConfirm("سيتم مسح البيانات من الشاشة (تبقى في السحابة). خروج؟", () => {
             localStorage.removeItem('gAccessToken');
             localStorage.removeItem('userPhotoVault');
+            localStorage.removeItem('appPass'); // Optional: Clear preferences
+            localStorage.removeItem('vaultPass');
             gAccessToken = null;
-            document.getElementById('googleLogoutIcon').innerText = '🚪';
-            checkGoogleLoginState();
-            showToast("تم تسجيل الخروج من السحابة");
+            accounts = [];
+            folders = ["عام"];
+            document.getElementById('loginOverlay').style.display = 'flex';
+            renderVault();
+            showToast("تم تسجيل الخروج");
         });
     }
 
-    // --- SYNC ENGINE (Direct Replace) ---
+    // --- SYNC ENGINE ---
     
     function setSyncLoader(show) { document.getElementById('syncLoader').style.display = show ? 'inline-block' : 'none'; }
 
-    async function forceUploadToDrive() {
-        document.getElementById('mainMenu').style.display = 'none';
-        if(!gAccessToken) { showToast("غير مسجل دخول ⚠️"); return; }
+    function triggerAutoSave() {
+        if(saveTimeout) clearTimeout(saveTimeout);
+        setSyncLoader(true); 
+        // تأخير بسيط لتجميع التعديلات السريعة
+        saveTimeout = setTimeout(() => {
+            forceUploadToDrive(true);
+        }, 1500);
+    }
+
+    async function forceUploadToDrive(silent = false) {
+        if(!gAccessToken) return;
+        if(!silent) {
+            document.getElementById('mainMenu').style.display = 'none';
+            showToast("جاري الرفع...");
+        }
         setSyncLoader(true);
-        showToast("جاري الرفع للسحابة...");
 
         try {
-            // Check for existing file
             const q = `name = '${FILENAME}' and 'appDataFolder' in parents and trashed = false`;
             const searchResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=appDataFolder`, {
                 headers: { 'Authorization': `Bearer ${gAccessToken}` }
             });
 
             if(searchResp.status === 401) {
+                // إذا انتهت صلاحية الجلسة
                 localStorage.removeItem('gAccessToken'); gAccessToken=null; 
-                tokenClient.requestAccessToken(); return;
+                document.getElementById('loginOverlay').style.display = 'flex';
+                return;
             }
 
             const data = await searchResp.json();
             let fileId = null;
             if(data.files && data.files.length > 0) fileId = data.files[0].id;
 
-            // Prepare Data Package
             const payload = { 
                 accounts: accounts, 
                 folders: folders,
@@ -665,14 +650,12 @@
             const fileBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
 
             if(fileId) {
-                // Update existing file
                 await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
                     method: 'PATCH',
                     headers: { 'Authorization': `Bearer ${gAccessToken}`, 'Content-Type': 'application/json' },
                     body: fileBlob
                 });
             } else {
-                // Create new file
                 const metadata = { name: FILENAME, mimeType: 'application/json', parents: ['appDataFolder'] };
                 const form = new FormData();
                 form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
@@ -683,19 +666,19 @@
                     body: form
                 });
             }
-            showToast("تم الحفظ في السحابة ✅");
+            if(!silent) showToast("تم الحفظ سحابياً ✅");
         } catch(e) {
             console.error(e);
-            showToast("فشل الرفع ❌");
+            if(!silent) showToast("فشل الرفع ❌");
         }
         setSyncLoader(false);
     }
 
-    async function forceSyncFromCloud() {
-        document.getElementById('mainMenu').style.display = 'none';
-        if(!gAccessToken) { showToast("غير مسجل دخول ⚠️"); return; }
+    async function forceSyncFromCloud(silent = false) {
+        if(!gAccessToken) return;
+        if(!silent) document.getElementById('mainMenu').style.display = 'none';
         setSyncLoader(true);
-        showToast("جاري جلب البيانات...");
+        if(!silent) showToast("جاري جلب البيانات...");
 
         try {
             const q = `name = '${FILENAME}' and 'appDataFolder' in parents and trashed = false`;
@@ -703,6 +686,12 @@
                 headers: { 'Authorization': `Bearer ${gAccessToken}` }
             });
             
+            if(searchResp.status === 401) {
+                localStorage.removeItem('gAccessToken'); gAccessToken=null; 
+                document.getElementById('loginOverlay').style.display = 'flex';
+                return;
+            }
+
             const data = await searchResp.json();
             if(data.files && data.files.length > 0) {
                 const fileId = data.files[0].id;
@@ -711,82 +700,27 @@
                 });
                 const cloudContent = await fileResp.json();
                 
-                // Replace local data with cloud data
                 if(cloudContent) {
                     if(cloudContent.accounts) accounts = cloudContent.accounts;
                     if(cloudContent.folders) folders = cloudContent.folders;
                     
                     if(cloudContent.appPass) localStorage.setItem('appPass', cloudContent.appPass);
-                    else localStorage.removeItem('appPass');
-
                     if(cloudContent.vaultPass) localStorage.setItem('vaultPass', cloudContent.vaultPass);
-                    else localStorage.removeItem('vaultPass');
 
-                    saveToLocal();
                     renderVault();
-                    showToast("تم استعادة البيانات ✅");
+                    if(!silent) showToast("تم التحديث من السحابة ✅");
                 }
             } else {
-                showToast("لا توجد نسخة احتياطية ℹ️");
+                if(!silent) showToast("الخزنة السحابية فارغة ℹ️");
             }
         } catch(e) {
             console.error(e);
-            showToast("فشل الجلب ❌");
+            if(!silent) showToast("فشل الجلب ❌");
         }
         setSyncLoader(false);
     }
 
-    // --- FILE EXPORT/IMPORT (New) ---
-    function exportDataAuto() {
-        document.getElementById('mainMenu').style.display = 'none';
-        const dataToSave = {
-            accounts: accounts,
-            folders: folders
-        };
-        const blob = new Blob([JSON.stringify(dataToSave)], {type: "application/json"});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "secrets_vault_backup.json";
-        a.click();
-    }
-
-    function importDataWrapper(e) {
-        document.getElementById('mainMenu').style.display = 'none';
-        const reader = new FileReader();
-        reader.onload = (f) => {
-            try {
-                const imported = JSON.parse(f.target.result);
-                // Handle different structures
-                const newAccounts = Array.isArray(imported) ? imported : (imported.accounts || []);
-                const newFolders = imported.folders || ["عام"];
-                
-                // Merge logic (Append new to existing)
-                const clean = newAccounts.map(a => ({ id: a.id || Date.now()+Math.random(), email: a.email || a.title || "مستورد", pass: a.pass||"...", folder: a.folder||"عام" }));
-                accounts = [...accounts, ...clean];
-                
-                // Add new folders if unique
-                newFolders.forEach(f => {
-                    if(!folders.includes(f)) folders.push(f);
-                });
-
-                saveToLocal();
-                renderVault();
-                showToast('تم استعادة البيانات بنجاح ✅');
-            } catch(e){
-                showToast('ملف غير صالح ❌');
-            }
-        };
-        if(e.target.files.length > 0) {
-            reader.readAsText(e.target.files[0]);
-        }
-    }
-
     // --- Helper Functions ---
-    function saveToLocal() {
-        localStorage.setItem('myPasswords', JSON.stringify(accounts));
-        localStorage.setItem('myFolders', JSON.stringify(folders));
-    }
-
     function pushHistory(type = 'modal') { 
         window.history.pushState({modal: type}, null, ''); 
     }
@@ -829,8 +763,9 @@
             }
         }
         
-        if(document.getElementById('loginOverlay').style.display === 'flex') {
-            document.getElementById('loginOverlay').style.display = 'none';
+        // منع إغلاق شاشة الدخول إذا لم يكن مسجلاً
+        if(!gAccessToken && document.getElementById('loginOverlay').style.display === 'flex') {
+             history.pushState(null, null, location.href);
         }
     };
 
@@ -865,11 +800,11 @@
         const pass = document.getElementById('passInput').value;
         
         accounts.unshift({ id: Date.now(), email, pass, folder: targetFolder });
-        saveToLocal();
+        triggerAutoSave();
 
         document.getElementById('emailInput').value = '';
         document.getElementById('passInput').value = '';
-        showToast("تم الحفظ محلياً");
+        showToast("جاري الحفظ...");
         renderVault();
     }
 
@@ -971,10 +906,10 @@
         if(selectedIds.size === 0) return;
         customConfirm(`هل أنت متأكد من حذف ${selectedIds.size} عنصر؟`, () => {
              accounts = accounts.filter(acc => !selectedIds.has(acc.id));
-             saveToLocal();
+             triggerAutoSave();
              toggleSelectionMode(); 
              renderVault();
-             showToast("تم الحذف ✅");
+             showToast("تم الحذف");
         });
     }
 
@@ -1039,7 +974,7 @@
 
     function executeMove(targetFolder) {
         accounts.forEach(acc => { if(selectedIds.has(acc.id)) acc.folder = targetFolder; });
-        saveToLocal();
+        triggerAutoSave();
         toggleSelectionMode(); activeFolder = targetFolder; renderFoldersBar(); renderVault();
         showToast("تم النقل ✅");
     }
@@ -1063,7 +998,8 @@
         } else {
             if(!folders.includes(name)) folders.push(name);
         }
-        saveToLocal(); goBack(); renderFoldersBar(); renderVault();
+        triggerAutoSave(); 
+        goBack(); renderFoldersBar(); renderVault();
     }
 
     function startFolderPress(f) {
@@ -1130,7 +1066,7 @@
              accounts = newAccounts;
         }
 
-        saveToLocal();
+        triggerAutoSave();
     }
 
     // --- Context Menu ---
@@ -1154,9 +1090,9 @@
             if (action === 'copy') copyToClipboard(currentCtxType === 'email' ? acc.email : acc.pass);
             else if (action === 'delete') {
                 customConfirm("حذف نهائي؟", () => {
-                    const idToDelete = currentCtxId; // Capture ID
-                    accounts = accounts.filter(a => a.id !== idToDelete); // Delete Local
-                    saveToLocal();
+                    const idToDelete = currentCtxId; 
+                    accounts = accounts.filter(a => a.id !== idToDelete);
+                    triggerAutoSave();
                     renderVault();
                     showToast("تم الحذف");
                 });
@@ -1164,8 +1100,9 @@
                 document.getElementById('emailInput').value = acc.email;
                 document.getElementById('passInput').value = acc.pass;
                 accounts = accounts.filter(a => a.id !== currentCtxId);
-                saveToLocal(); renderVault(); 
+                renderVault(); 
                 if(document.getElementById('vaultPage').style.display==='flex') goBack();
+                showToast("جاري التعديل... اضغط حفظ عند الانتهاء");
             }
         }, 200);
     }
@@ -1178,9 +1115,6 @@
         
         document.getElementById('lockMenuText').innerText = appPass ? "إلغاء قفل التطبيق" : "تعيين قفل للتطبيق";
         
-        // Update Google State in Menu
-        checkGoogleLoginState();
-
         if (m.style.display === 'flex') {
             m.style.display = 'none';
         } else {
@@ -1200,6 +1134,7 @@
                 if(v === appPass) { 
                     localStorage.removeItem('appPass'); 
                     showToast("تم إزالة القفل 🔓");
+                    triggerAutoSave();
                 }
                 else showToast("خطأ في الرمز");
             });
@@ -1208,17 +1143,45 @@
                 if(v) { 
                     localStorage.setItem('appPass', v); 
                     showToast("تم القفل 🔒");
+                    triggerAutoSave();
                 } 
             });
         }
     }
 
-    function confirmDeleteAll() {
+    // --- File Export/Import ---
+    function exportDataAuto() {
         document.getElementById('mainMenu').style.display = 'none';
-        customConfirm("حذف كل البيانات (محلي فقط)؟", async () => {
-            localStorage.clear(); accounts = []; folders = ["عام"];
-            location.reload();
-        });
+        const dataToSave = { accounts: accounts, folders: folders };
+        const blob = new Blob([JSON.stringify(dataToSave)], {type: "application/json"});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "secrets_vault_backup.json";
+        a.click();
+    }
+
+    function importDataWrapper(e) {
+        document.getElementById('mainMenu').style.display = 'none';
+        const reader = new FileReader();
+        reader.onload = (f) => {
+            try {
+                const imported = JSON.parse(f.target.result);
+                const newAccounts = Array.isArray(imported) ? imported : (imported.accounts || []);
+                const newFolders = imported.folders || ["عام"];
+                
+                const clean = newAccounts.map(a => ({ id: a.id || Date.now()+Math.random(), email: a.email || a.title || "مستورد", pass: a.pass||"...", folder: a.folder||"عام" }));
+                accounts = [...accounts, ...clean];
+                
+                newFolders.forEach(f => { if(!folders.includes(f)) folders.push(f); });
+
+                triggerAutoSave();
+                renderVault();
+                showToast('تم استعادة البيانات بنجاح ✅');
+            } catch(e){
+                showToast('ملف غير صالح ❌');
+            }
+        };
+        if(e.target.files.length > 0) reader.readAsText(e.target.files[0]);
     }
 
     // --- Utils ---
@@ -1250,12 +1213,14 @@
             if(v===vp){ 
                 localStorage.removeItem('vaultPass'); 
                 showToast("تم الإلغاء"); 
+                triggerAutoSave();
             } else showToast("خطأ"); 
         });
         else openPasswordModal("قفل الخزنة", v => { 
             if(v){ 
                 localStorage.setItem('vaultPass', v); 
                 showToast("تم القفل");
+                triggerAutoSave();
             } 
         });
     }
@@ -1290,7 +1255,7 @@
             const raw = Array.isArray(data) ? data : (data.accounts || []);
             const clean = raw.map(a => ({ id: a.id || Date.now()+Math.random(), email: a.email || a.title || "مستورد", pass: a.pass||"...", folder: a.folder||"عام" }));
             accounts = [...accounts, ...clean];
-            saveToLocal();
+            triggerAutoSave();
             goBack(); showToast(`تم استيراد ${clean.length} عنصر`); renderVault();
         } catch(e) { showToast("كود غير صالح ❌"); }
     }
